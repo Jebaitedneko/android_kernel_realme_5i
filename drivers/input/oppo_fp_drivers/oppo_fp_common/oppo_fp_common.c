@@ -17,12 +17,13 @@
 
 #include <linux/module.h>
 #include <linux/proc_fs.h>
-#if CONFIG_OPPO_FINGERPRINT_PLATFORM == 6763 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6771 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6779
+#if ( CONFIG_OPPO_FINGERPRINT_PLATFORM == 6763 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6771 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6779 )
 #include <sec_boot_lib.h>
-#elif CONFIG_OPPO_FINGERPRINT_PLATFORM == 855 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6125
+#elif ( CONFIG_OPPO_FINGERPRINT_PLATFORM == 855 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6125 )
 #include <linux/uaccess.h>
 #else
-#include <soc/qcom/smem.h>
+#include <linux/soc/qcom/smem.h>
+#include <linux/uaccess.h>
 #endif
 #include <soc/oppo/oppo_project.h>
 #include <linux/slab.h>
@@ -69,19 +70,9 @@ extern int egis_opticalfp_irq_handler(struct fp_underscreen_info* tp_info);
 #endif
 #endif
 
-#if CONFIG_OPPO_FINGERPRINT_PROJCT == 19631 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19633 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19632 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19637 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19638
 fp_module_config_t fp_module_config_list[] = {
     {{1, -1, -1},  FP_FPC_1511, CHIP_FPC, ENGINEER_MENU_FPC1511},
 };
-#elif CONFIG_OPPO_FINGERPRINT_PROJCT == 19743 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19745
-fp_module_config_t fp_module_config_list[] = {
-	{{1, -1, -1},  FP_EGIS_520, CHIP_EGIS, ENGINEER_MENU_EGIS520},
-};
-#else
-fp_module_config_t fp_module_config_list[] = {
-	{{1, -1, -1},  FP_UNKNOWN, CHIP_UNKNOWN, ENGINEER_MENU_DEFAULT},
-};
-#endif
 
 static int fp_request_named_gpio(struct fp_data *fp_data,
         const char *label, int *gpio)
@@ -116,35 +107,12 @@ static int fp_gpio_parse_dts(struct fp_data *fp_data)
         goto exit;
     }
 
-#if CONFIG_OPPO_FINGERPRINT_PROJCT == 19631 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19633 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19632 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19637 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19638 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19743 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19745
     ret = fp_request_named_gpio(fp_data, "oppo,fp-id1",
             &fp_data->gpio_id0);
     if (ret) {
         ret = FP_ERROR_GPIO;
         goto exit;
     }
-#else
-    ret = fp_request_named_gpio(fp_data, "oppo,fp-id0",
-            &fp_data->gpio_id0);
-    if (ret) {
-        ret = FP_ERROR_GPIO;
-        goto exit;
-    }
-
-    ret = fp_request_named_gpio(fp_data, "oppo,fp-id1",
-            &fp_data->gpio_id1);
-    if (ret) {
-        ret = FP_ERROR_GPIO;
-        goto exit;
-    }
-
-    ret = fp_request_named_gpio(fp_data, "oppo,fp-id2",
-            &fp_data->gpio_id2);
-    if (ret) {
-        ret = FP_ERROR_GPIO;
-        goto exit;
-    }
-#endif
 
 exit:
     return ret;
@@ -251,15 +219,9 @@ static int fp_register_proc_fs(struct fp_data *fp_data)
 {
     uint32_t fp_id_retry;
     fp_id_retry = 0;
-#if CONFIG_OPPO_FINGERPRINT_PROJCT == 19631 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19633 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19632 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19637 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19638 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19743 || CONFIG_OPPO_FINGERPRINT_PROJCT == 19745
     fp_data->fp_id0 = gpio_get_value(fp_data->gpio_id0);
     fp_data->fp_id1 = -1;
     fp_data->fp_id2 = -1;
-#else
-    fp_data->fp_id0 = gpio_get_value(fp_data->gpio_id0);
-    fp_data->fp_id1 = gpio_get_value(fp_data->gpio_id1);
-    fp_data->fp_id2 = gpio_get_value(fp_data->gpio_id2);
-#endif
 
     dev_err(fp_data->dev, "fp_register_proc_fs check: fp_id0= %d, fp_id1= %d, fp_id2= %d, fp_id3 = %d, fp_id_retry= %d\n", \
             fp_data->fp_id0, fp_data->fp_id1, fp_data->fp_id2, fp_data->fp_id3, fp_id_retry);
@@ -310,7 +272,7 @@ static int oppo_fp_common_probe(struct platform_device *fp_dev)
         goto exit;
     }
 
-#if CONFIG_OPPO_FINGERPRINT_PLATFORM == 6763 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6771 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6779
+#if ( CONFIG_OPPO_FINGERPRINT_PLATFORM == 6763 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6771 || CONFIG_OPPO_FINGERPRINT_PLATFORM == 6779 )
     msleep(20);
 #endif
 
