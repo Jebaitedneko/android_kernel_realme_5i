@@ -293,7 +293,7 @@ retry_locked:
 		return ret ? ERR_PTR(ret) :
 			follow_page_pte(vma, address, pmd, flags);
 	}
-	page = follow_trans_huge_pmd(vma, address, pmd, flags);
+	page = follow_page_pte(vma, address, pmd, flags);
 	spin_unlock(ptl);
 	*page_mask = HPAGE_PMD_NR - 1;
 	return page;

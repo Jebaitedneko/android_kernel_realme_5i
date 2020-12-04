@@ -58,10 +58,10 @@ static void truncate_exceptional_entry(struct address_space *mapping,
 	if (shmem_mapping(mapping))
 		return;
 
-	if (dax_mapping(mapping)) {
-		dax_delete_mapping_entry(mapping, index);
-		return;
-	}
+// 	if (dax_mapping(mapping)) {
+// 		dax_delete_mapping_entry(mapping, index);
+// 		return;
+// 	}
 	clear_shadow_entry(mapping, index, entry);
 }
 
@@ -89,8 +89,8 @@ static int invalidate_exceptional_entry2(struct address_space *mapping,
 	/* Handled by shmem itself */
 	if (shmem_mapping(mapping))
 		return 1;
-	if (dax_mapping(mapping))
-		return dax_invalidate_mapping_entry_sync(mapping, index);
+// 	if (dax_mapping(mapping))
+// 		return dax_invalidate_mapping_entry_sync(mapping, index);
 	clear_shadow_entry(mapping, index, entry);
 	return 1;
 }

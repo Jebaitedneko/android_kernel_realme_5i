@@ -324,7 +324,7 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
 
 	next = pmd_addr_end(addr, end);
 	if (pmd_trans_huge(*pmd))
-		if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+// 		if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
 			goto next;
 
 	if (pmd_trans_unstable(pmd))

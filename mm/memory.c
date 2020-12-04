@@ -1829,9 +1829,9 @@ static int insert_pfn(struct vm_area_struct *vma, unsigned long addr,
 	}
 
 	/* Ok, finally just insert the thing.. */
-	if (pfn_t_devmap(pfn))
-		entry = pte_mkdevmap(pfn_t_pte(pfn, prot));
-	else
+// 	if (pfn_t_devmap(pfn))
+// 		entry = pte_mkdevmap(pfn_t_pte(pfn, prot));
+// 	else
 		entry = pte_mkspecial(pfn_t_pte(pfn, prot));
 
 out_mkwrite:
@@ -4105,8 +4105,8 @@ out:
 
 static inline int create_huge_pmd(struct vm_fault *vmf)
 {
-	if (vma_is_anonymous(vmf->vma))
-		return do_huge_pmd_anonymous_page(vmf);
+// 	if (vma_is_anonymous(vmf->vma))
+// 		return do_huge_pmd_anonymous_page(vmf);
 	if (vmf->vma->vm_ops->huge_fault)
 		return vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
 	return VM_FAULT_FALLBACK;
@@ -4114,8 +4114,8 @@ static inline int create_huge_pmd(struct vm_fault *vmf)
 
 static int wp_huge_pmd(struct vm_fault *vmf, pmd_t orig_pmd)
 {
-	if (vma_is_anonymous(vmf->vma))
-		return do_huge_pmd_wp_page(vmf, orig_pmd);
+// 	if (vma_is_anonymous(vmf->vma))
+// 		return do_huge_pmd_wp_page(vmf, orig_pmd);
 	if (vmf->vma->vm_ops->huge_fault)
 		return vmf->vma->vm_ops->huge_fault(vmf, PE_SIZE_PMD);
 
@@ -4350,9 +4350,6 @@ static int __handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
 				ret = wp_huge_pmd(&vmf, orig_pmd);
 				if (!(ret & VM_FAULT_FALLBACK))
 					return ret;
-			} else {
-				huge_pmd_set_accessed(&vmf, orig_pmd);
-				return 0;
 			}
 		}
 	}

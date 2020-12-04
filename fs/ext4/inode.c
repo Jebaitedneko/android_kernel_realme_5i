@@ -2747,11 +2747,11 @@ static int ext4_writepages(struct address_space *mapping,
 	percpu_down_read(&sbi->s_journal_flag_rwsem);
 	trace_ext4_writepages(inode, wbc);
 
-	if (dax_mapping(mapping)) {
-		ret = dax_writeback_mapping_range(mapping, inode->i_sb->s_bdev,
-						  wbc);
-		goto out_writepages;
-	}
+// 	if (dax_mapping(mapping)) {
+// 		ret = dax_writeback_mapping_range(mapping, inode->i_sb->s_bdev,
+// 						  wbc);
+// 		goto out_writepages;
+// 	}
 
 	/*
 	 * No pages to write? This is mainly a kludge to avoid starting
@@ -4101,10 +4101,10 @@ static int ext4_block_zero_page_range(handle_t *handle,
 	if (length > max || length < 0)
 		length = max;
 
-	if (IS_DAX(inode)) {
-		return iomap_zero_range(inode, from, length, NULL,
-					&ext4_iomap_ops);
-	}
+// 	if (IS_DAX(inode)) {
+// 		return iomap_zero_range(inode, from, length, NULL,
+// 					&ext4_iomap_ops);
+// 	}
 	return __ext4_block_zero_page_range(handle, mapping, from, length);
 }
 

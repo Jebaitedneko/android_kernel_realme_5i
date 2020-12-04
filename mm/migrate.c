@@ -246,7 +246,7 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
 				entry = make_device_private_entry(new, pte_write(pte));
 				pte = swp_entry_to_pte(entry);
 			} else if (is_device_public_page(new)) {
-				pte = pte_mkdevmap(pte);
+// 				pte = pte_mkdevmap(pte);
 				flush_dcache_page(new);
 			}
 		} else
