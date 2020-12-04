@@ -14,6 +14,9 @@ modules/
 out/
 anykernel/anykernel3/
 anykernel/pronto_wlan/
+clang-6.0.9/
+los-4.9-32/
+los-4.9-64/
 .*
 *.a
 *.bin
