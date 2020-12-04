@@ -2968,7 +2968,7 @@ static const struct of_device_id ipa_pci_drv_match[] = {
  *
  * VENDOR and DEVICE should be defined in pci_ids.h
  */
-static int ipa_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent);
+static int __init ipa_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent);
 static void ipa_pci_remove(struct pci_dev *pdev);
 static void ipa_pci_shutdown(struct pci_dev *pdev);
 static pci_ers_result_t ipa_pci_io_error_detected(struct pci_dev *dev,
@@ -2995,7 +2995,7 @@ static const struct pci_error_handlers ipa_pci_err_handler = {
 	.resume = ipa_pci_io_resume,
 };
 
-static struct pci_driver ipa_pci_driver = {
+static struct pci_driver __refdata ipa_pci_driver = {
 	.name     = ipa_pci_driver_name,
 	.id_table = ipa_pci_tbl,
 	.probe    = ipa_pci_probe,
